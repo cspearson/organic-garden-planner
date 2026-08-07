@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2d5a27" />
+  <meta name="description" content="Beginner-friendly organic no-till garden planner and designer. Plan your garden with photos, measurements, and regenerative practices." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <title>Organic Garden Planner – No-Till Beginner Guide</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <span class="leaf">🌱</span>
+        <h1>Organic Garden</h1>
+      </div>
+      <button id="menu-btn" class="icon-btn" aria-label="Menu">☰</button>
+    </header>
+
+    <!-- Main content area -->
+    <main id="main-content">
+      <!-- Home / Welcome screen -->
+      <section id="view-home" class="view active">
+        <div class="hero">
+          <h2>Plan Your First Organic Garden</h2>
+          <p class="subtitle">No-till • Soil-first • Beginner friendly</p>
+        </div>
+
+        <div class="card-grid">
+          <button class="feature-card" data-action="new-garden">
+            <span class="card-icon">📐</span>
+            <h3>Start New Garden</h3>
+            <p>Use measurements or a photo of your space</p>
+          </button>
+          <button class="feature-card" data-action="learn">
+            <span class="card-icon">📚</span>
+            <h3>Learn No-Till Basics</h3>
+            <p>Why soil health matters & how to start</p>
+          </button>
+          <button class="feature-card" data-action="plants">
+            <span class="card-icon">🥕</span>
+            <h3>Plant Guide</h3>
+            <p>Beginner crops that love organic soil</p>
+          </button>
+          <button class="feature-card" data-action="my-gardens">
+            <span class="card-icon">🏡</span>
+            <h3>My Gardens</h3>
+            <p>Saved plans & progress</p>
+          </button>
+        </div>
+
+        <div class="tip-box">
+          <strong>Quick tip:</strong> Healthy soil is 50% of gardening success. No-till keeps the living soil web intact.
+        </div>
+      </section>
+
+      <!-- New Garden / Setup -->
+      <section id="view-setup" class="view">
+        <div class="view-header">
+          <button class="back-btn" data-back="home">← Back</button>
+          <h2>Create Your Garden Space</h2>
+        </div>
+
+        <div class="setup-steps">
+          <div class="step active" data-step="1">
+            <h3>1. Name & Zone</h3>
+            <label>Garden name
+              <input type="text" id="garden-name" placeholder="e.g. Front Yard Beds" />
+            </label>
+            <label>USDA Hardiness Zone
+              <select id="garden-zone">
+                <option value="">Select or enter later</option>
+                <option value="3">Zone 3</option>
+                <option value="4">Zone 4</option>
+                <option value="5">Zone 5</option>
+                <option value="6a">Zone 6a</option>
+                <option value="6b" selected>Zone 6b</option>
+                <option value="7a">Zone 7a</option>
+                <option value="7b">Zone 7b</option>
+                <option value="8">Zone 8</option>
+                <option value="9">Zone 9</option>
+                <option value="10">Zone 10</option>
+              </select>
+            </label>
+            <p class="help-text">Not sure of your zone? Look up by zip code later or start with 6b (common in many mid-latitude areas).</p>
+            <button class="primary-btn next-step" data-next="2">Continue</button>
+          </div>
+
+          <div class="step" data-step="2">
+            <h3>2. Size Your Space</h3>
+            <p>Enter real measurements of the area you want to garden. You can refine later.</p>
+            <div class="measure-row">
+              <label>Length (ft)
+                <input type="number" id="space-length" min="1" step="0.5" placeholder="20" />
+              </label>
+              <label>Width (ft)
+                <input type="number" id="space-width" min="1" step="0.5" placeholder="10" />
+              </label>
+            </div>
+            <p class="or-divider">— or —</p>
+            <label class="photo-upload">
+              <span>📷 Upload a photo of the area</span>
+              <input type="file" id="space-photo" accept="image/*" capture="environment" />
+            </label>
+            <p class="help-text">After uploading, you’ll set a scale by tapping two points and entering the real distance between them.</p>
+            <button class="primary-btn next-step" data-next="3">Continue to Designer</button>
+          </div>
+
+          <div class="step" data-step="3">
+            <h3>3. Design Beds</h3>
+            <p class="help-text">We’ll build the visual designer next. For now, this creates a simple measured plan.</p>
+            <button class="primary-btn" id="create-garden-btn">Create Garden Plan</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Designer view -->
+      <section id="view-designer" class="view">
+        <div class="view-header">
+          <button class="back-btn" data-back="home">← Home</button>
+          <h2 id="designer-title">Garden Designer</h2>
+        </div>
+        <div class="designer-toolbar">
+          <button class="tool-btn active" data-tool="bed">➕ Add Bed</button>
+          <button class="tool-btn" data-tool="scale">📏 Set Scale</button>
+          <button class="tool-btn" data-tool="delete" id="btn-delete-bed">🗑️ Last Bed</button>
+          <button class="tool-btn" data-tool="clear" id="btn-clear-beds">Clear</button>
+        </div>
+        <div id="canvas-container" class="canvas-wrap">
+          <canvas id="garden-canvas"></canvas>
+        </div>
+        <div class="designer-info tip">
+          <strong>No-till tip:</strong> Draw permanent beds. Keep clear paths for walking. Never walk on the growing areas — this protects soil structure and the living soil web.
+        </div>
+        <div id="bed-suggestions" class="suggestions hidden"></div>
+        <p class="help-text" style="font-size:0.85rem;color:#555;margin-top:8px;">
+          Drag on the canvas to create a bed. If you uploaded a photo, first tap “Set Scale”, then tap two known points and enter the real distance in feet.
+        </p>
+      </section>
+
+      <!-- Learn No-Till -->
+      <section id="view-learn" class="view">
+        <div class="view-header">
+          <button class="back-btn" data-back="home">← Back</button>
+          <h2>No-Till & Organic Basics</h2>
+        </div>
+        <article class="content-card">
+          <h3>Why No-Till?</h3>
+          <p>Tilling destroys soil structure, kills beneficial fungi and microbes, and releases carbon. No-till keeps the underground ecosystem intact so plants get better water, nutrients, and disease resistance.</p>
+        </article>
+        <article class="content-card">
+          <h3>Core Practices We Promote</h3>
+          <ul>
+            <li><strong>Keep soil covered</strong> — mulch or living cover crops year-round.</li>
+            <li><strong>Disturb as little as possible</strong> — plant into mulch or use broadforks if needed.</li>
+            <li><strong>Feed the soil, not the plant</strong> — compost, compost tea, organic matter.</li>
+            <li><strong>Diversity</strong> — polycultures, companions, and beneficial insects.</li>
+            <li><strong>Permanent beds & paths</strong> — never walk on growing areas.</li>
+          </ul>
+        </article>
+        <article class="content-card">
+          <h3>Getting Started This Season</h3>
+          <ol>
+            <li>Mark permanent beds (no walking on them).</li>
+            <li>Sheet mulch or add 3–6" of organic mulch.</li>
+            <li>Plant through the mulch or in small openings.</li>
+            <li>Add compost on top each season — never dig it in.</li>
+          </ol>
+        </article>
+      </section>
+
+      <!-- Plants guide placeholder -->
+      <section id="view-plants" class="view">
+        <div class="view-header">
+          <button class="back-btn" data-back="home">← Back</button>
+          <h2>Beginner Plant Guide</h2>
+        </div>
+        <p class="intro">Crops that thrive with organic no-till methods and are forgiving for new gardeners.</p>
+        <div id="plant-list" class="plant-grid">
+          <!-- Filled by JS -->
+        </div>
+      </section>
+
+      <!-- My Gardens -->
+      <section id="view-my-gardens" class="view">
+        <div class="view-header">
+          <button class="back-btn" data-back="home">← Back</button>
+          <h2>My Gardens</h2>
+        </div>
+        <div id="saved-gardens">
+          <p class="empty-state">No gardens saved yet. Create your first one!</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom nav for mobile -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-view="home">
+        <span>🏠</span>
+        <small>Home</small>
+      </button>
+      <button class="nav-item" data-view="setup">
+        <span>➕</span>
+        <small>New</small>
+      </button>
+      <button class="nav-item" data-view="plants">
+        <span>🌱</span>
+        <small>Plants</small>
+      </button>
+      <button class="nav-item" data-view="learn">
+        <span>📖</span>
+        <small>Learn</small>
+      </button>
+    </nav>
+  </div>
+
+  <script src="./app.js"></script>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js").catch(console.error);
+  }
+</script>
+</body>
+</html>
